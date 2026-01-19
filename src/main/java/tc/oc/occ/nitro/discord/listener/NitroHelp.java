@@ -1,15 +1,8 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import java.util.concurrent.TimeUnit;
-
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
-import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.DiscordBot;

@@ -1,28 +1,17 @@
 package tc.oc.occ.nitro.discord;
 
-import java.time.Duration;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.ErrorHandler;
-import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.bukkit.material.Gate;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.listener.*;
+
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class DiscordBot {
 

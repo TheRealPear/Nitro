@@ -1,19 +1,17 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.DiscordBot;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NitroList extends NitroListener  {
   public NitroList(DiscordBot api, NitroConfig config) { super(api, config);}

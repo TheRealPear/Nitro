@@ -1,11 +1,12 @@
 package tc.oc.occ.nitro;
 
+import org.bukkit.configuration.Configuration;
+import tc.oc.occ.nitro.data.NitroUser;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.bukkit.configuration.Configuration;
-import tc.oc.occ.nitro.data.NitroUser;
 
 public class NitroConfig {
 

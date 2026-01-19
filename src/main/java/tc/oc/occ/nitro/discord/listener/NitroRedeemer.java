@@ -2,9 +2,7 @@ package tc.oc.occ.nitro.discord.listener;
 
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroCloudy;
 import tc.oc.occ.nitro.NitroConfig;
@@ -12,8 +10,6 @@ import tc.oc.occ.nitro.WebUtils;
 import tc.oc.occ.nitro.data.NitroUser;
 import tc.oc.occ.nitro.discord.DiscordBot;
 import tc.oc.occ.nitro.events.NitroUserAddEvent;
-
-import java.util.UUID;
 
 public class NitroRedeemer extends NitroListener  {
 

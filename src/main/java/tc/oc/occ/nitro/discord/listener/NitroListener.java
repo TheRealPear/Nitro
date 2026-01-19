@@ -1,11 +1,12 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import java.util.List;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.DiscordBot;
+
+import java.util.List;
 
 public abstract class NitroListener extends ListenerAdapter {
 

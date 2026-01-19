@@ -1,8 +1,6 @@
 package tc.oc.occ.nitro.discord.listener;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroCloudy;
 import tc.oc.occ.nitro.NitroConfig;
