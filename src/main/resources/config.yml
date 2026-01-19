@@ -19,6 +19,6 @@ removal-commands:
 
 # List of nitro boosters
 # Format
-# Discriminated Discord username : User Discord ID : Minecraft username : Minecraft username
+# Discord username : User Discord ID : Minecraft username : Minecraft username
 nitro-boosters:
   - ""
