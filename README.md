@@ -39,7 +39,7 @@ removal-commands:
 # Format
 # Discord username with discriminator : Discord User ID : Minecraft username : Minecraft UUID
 nitro-boosters:
-  - Notch#0001:000000000123456789:Notch:069a79f4-44e9-4726-a5be-fca90e38aaf5
+  - Notch:000000000123456789:Notch:069a79f4-44e9-4726-a5be-fca90e38aaf5
 ```
 
 - Messages detailing the Discord user that has claimed Nitro perks and their target Minecraft username will be logged to both the server's console and the designated alerts channel (`channel-alerts`).
