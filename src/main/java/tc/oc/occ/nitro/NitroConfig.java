@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.configuration.Configuration;
-import tc.oc.occ.nitro.data.BannedNitroUser;
 import tc.oc.occ.nitro.data.NitroUser;
 
 public class NitroConfig {
@@ -17,7 +16,6 @@ public class NitroConfig {
   private String nitroRole;
 
   private List<NitroUser> nitroUsers;
-  private List<BannedNitroUser> bannedUsers;
 
   private String alertChannel;
   private String mainChannel;
@@ -46,13 +44,6 @@ public class NitroConfig {
         nitroData.stream()
             .filter(str -> str != null && !str.isEmpty())
             .map(NitroUser::of)
-            .collect(Collectors.toList());
-
-    List<String> bannedData = config.getStringList("banned-boosters");
-    this.bannedUsers =
-        bannedData.stream()
-            .filter(str -> str != null && !str.isEmpty())
-            .map(BannedNitroUser::of)
             .collect(Collectors.toList());
   }
 
@@ -88,10 +79,6 @@ public class NitroConfig {
     return nitroUsers;
   }
 
-  public List<BannedNitroUser> getBannedUsers() {
-    return bannedUsers;
-  }
-
   public List<String> getRedemptionCommands() {
     return redemptionCommands;
   }
@@ -101,8 +88,8 @@ public class NitroConfig {
   }
 
   public NitroUser addNitro(
-      String discriminatedUsername, String discordId, String minecraftUsername, UUID playerId) {
-    NitroUser user = new NitroUser(discriminatedUsername, discordId, minecraftUsername, playerId);
+      String discordUsername, String discordId, String minecraftUsername, UUID playerId) {
+    NitroUser user = new NitroUser(discordUsername, discordId, minecraftUsername, playerId);
     this.nitroUsers.add(user);
     return user;
   }
@@ -112,6 +99,8 @@ public class NitroConfig {
         .filter(user -> user.getDiscordId().equalsIgnoreCase(discordId))
         .findAny();
   }
+
+
 
   public void removeNitro(NitroUser user) {
     nitroUsers.remove(user);

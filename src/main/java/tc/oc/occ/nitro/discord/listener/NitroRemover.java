@@ -1,109 +1,75 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.listener.message.MessageCreateListener;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+
+import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroCloudy;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.data.NitroUser;
 import tc.oc.occ.nitro.discord.DiscordBot;
 import tc.oc.occ.nitro.events.NitroUserRemoveEvent;
 
-public class NitroRemover extends NitroListener implements MessageCreateListener {
+public class NitroRemover extends NitroListener{
 
   public NitroRemover(DiscordBot api, NitroConfig config) {
     super(api, config);
   }
 
-  @Override
-  public void onMessageCreate(MessageCreateEvent event) {
-    if (event.getChannel().getIdAsString().equals(config.getMainChannel())) {
-      if (event.getMessage().getContent().equalsIgnoreCase("!nitro-remove")) {
-        api.deleteCommand(event);
-        event
-            .getMessageAuthor()
-            .asUser()
-            .ifPresent(
-                user -> {
-                  if (isNitro(user) && !isBanned(user)) {
-                    String discordId = event.getMessageAuthor().getIdAsString();
-                    if (config.getUser(discordId).isPresent()) {
-                      NitroUser nitro = config.getUser(discordId).get();
-                      NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitro));
-                      api.sendMessage(
-                          ":white_check_mark: "
-                              + user.getMentionTag()
-                              + " You have removed Nitro Boosting privileges from `"
-                              + nitro.getMinecraftUsername()
-                              + "` (`"
-                              + nitro.getPlayerId().toString()
-                              + "`). You may use `!nitro-redeem <minecraft username>` to redeem them again.",
-                          false);
-
-                    } else {
-                      api.sendMessage(
-                          ":negative_squared_cross_mark: "
-                              + user.getMentionTag()
-                              + " You have not yet redeemed your Nitro Boosting privileges. Use `!nitro-redeem <minecraft username>` to claim them. For more information, use `!nitro-help`.",
-                          false);
-                    }
-                  } else {
-                    api.sendMessage(
-                        ":negative_squared_cross_mark: "
-                            + user.getMentionTag()
-                            + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.",
-                        false);
-                  }
-                });
-      }
-    } else if (event.getChannel().getIdAsString().equals(config.getStaffChannel())) {
-      if (event.getMessage().getContent().startsWith("!nitro-force-remove")) {
-        if (event.getMessage().getContent().split(" ").length == 2) {
-          String discordId = event.getMessage().getContent().split(" ")[1];
-          if (config.getUser(discordId).isPresent()) {
-            NitroUser nitro = config.getUser(discordId).get();
-            NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitro));
-            new MessageBuilder()
-                .append(
-                    ":white_check_mark: "
-                        + event.getMessageAuthor().asUser().get().getMentionTag()
-                        + " You have forcefully removed Nitro Boosting privileges from `"
-                        + nitro.getMinecraftUsername()
-                        + "`. Originally claimed by `"
-                        + nitro.getDiscriminatedUsername()
-                        + "` (`"
-                        + nitro.getPlayerId().toString()
-                        + "`).")
-                .send(event.getChannel());
-            api.alert(
-                ":triangular_flag_on_post: `"
-                    + event.getMessageAuthor().getDiscriminatedName()
-                    + "` (`"
-                    + event.getMessageAuthor().getIdAsString()
-                    + "`) has forcefully removed Nitro Boosting privileges from `"
-                    + nitro.getMinecraftUsername()
+    @Override
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        if (event.getName().equals("remove")) {
+            User user = event.getUser();
+            if (!isNitro(user)) {
+                event.reply(":no_entry_sign: You are not allowed to use this command! If you believe this is a mistake, contact a staff member.").setEphemeral(true).queue();
+                return;
+            }
+            String discordID = user.getId();
+            if (!config.getUser(discordID).isPresent()) {
+                event.reply(":no_entry_sign: You have not yet redeemed your Nitro Boosting perks. Use `/redeem` to claim them! For more information, use `/help`.").setEphemeral(true).queue();
+                return;
+            }
+            NitroUser nitroUser = config.getUser(discordID).get();
+            NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitroUser));
+            event.reply(":white_check_mark: " + user.getAsMention() + " You have removed Nitro Boosting privileges from `" + nitroUser.getMinecraftUsername() + "` (`" + nitroUser.getPlayerId().toString() + "`). You may use `/redeem` to redeem them again.").setEphemeral(true).queue();
+        } else if (event.getName().equals("force-remove")){
+            OptionMapping messageOption = event.getOption("discord-id");
+            if (messageOption == null) return;
+            if (!event.getChannelId().equals(config.getStaffChannel())) {
+                event.reply("Please run command in Staff Channel!").setEphemeral(true).queue();
+                return;
+            }
+            String discordId = messageOption.getAsUser().getId();
+            if (!config.getUser(discordId).isPresent()) {
+                event.reply(":no_entry_sign: No active Nitro Booster with the Discord ID `"
+                        + discordId
+                        + "` was found in the configuration. Use `!list  boosters` for a list of active boosters.").queue(); //TODO: Change to actual command when finished
+            }
+            NitroUser user = config.getUser(discordId).get();
+            NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(user));
+            event.reply(":triangular_flag_on_post: Forcefully removed Nitro Boosting privileges from `"
+                    + user.getMinecraftUsername()
                     + "` Originally claimed by `"
-                    + nitro.getDiscriminatedUsername()
+                    + user.getDiscordUsername()
                     + "` (`"
                     + discordId
-                    + "`).");
-          } else {
-            new MessageBuilder()
-                .append(
-                    ":negative_squared_cross_mark: "
-                        + event.getMessageAuthor().asUser().get().getMentionTag()
-                        + " No active Nitro Booster with the Discord ID `"
-                        + discordId
-                        + "` was found in the configuration. Use `!nitro-list boosters` for a list of active boosters.")
-                .send(event.getChannel());
-          }
-        } else {
-          new MessageBuilder()
-              .append(
-                  ":warning: Incorrect syntax! Use `!nitro-remove force <discord id>` to remove a user's Nitro Boosting privileges.")
-              .send(event.getChannel());
+                    + "`)." ).queue();
+            api.alert(
+                    ":triangular_flag_on_post: `"
+                            + event.getUser().getName()
+                            + "` (`"
+                            + event.getUser().getId()
+                            + "`) has forcefully removed Nitro Boosting privileges from `"
+                            + user.getMinecraftUsername()
+                            + "` Originally claimed by `"
+                            + user.getDiscordUsername()
+                            + "` (`"
+                            + discordId
+                            + "`).");
+
         }
-      }
     }
-  }
 }

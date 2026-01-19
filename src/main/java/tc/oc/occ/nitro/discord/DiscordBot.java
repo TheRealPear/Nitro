@@ -1,19 +1,32 @@
 package tc.oc.occ.nitro.discord;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
-import org.javacord.api.entity.intent.Intent;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.event.message.MessageCreateEvent;
+
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.ErrorResponse;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.bukkit.material.Gate;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.listener.*;
 
 public class DiscordBot {
 
-  private DiscordApi api;
+  private JDA api;
 
   private final NitroConfig config;
   private final Logger logger;
@@ -31,41 +44,47 @@ public class DiscordBot {
   public void enable() {
     if (config.isEnabled()) {
       logger.info("Enabling Nitro DiscordBot...");
-      new DiscordApiBuilder()
-          .setToken(config.getToken())
-          .setWaitForServersOnStartup(false)
-          .setIntents(
-              Intent.GUILDS, Intent.GUILD_MEMBERS, Intent.GUILD_PRESENCES, Intent.GUILD_MESSAGES)
-          .login()
-          .thenAcceptAsync(
-              api -> {
-                setAPI(api);
-                api.setMessageCacheSize(1, 60 * 60);
-                api.addListener(new NitroRedeemer(this, getConfig()));
-                api.addListener(new NitroRemover(this, getConfig()));
-                api.addListener(new NitroList(this, getConfig()));
-                api.addListener(new NitroBan(this, getConfig()));
-                api.addListener(new NitroHelp(this, getConfig()));
-                api.addListener(new NitroReload(this, getConfig()));
-                api.addListener(new NitroAddAlert(this, getConfig()));
-                api.addListener(new NitroRemoveAlert(this, getConfig()));
-
-                logger.info("Discord Bot (NitroCloudy) is now active!");
-              });
+      try {
+          this.api = JDABuilder.createDefault(config.getToken())
+                  .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
+                  .build();
+          this.api.awaitReady();
+          api.addEventListener(new NitroRedeemer(this, getConfig()));
+          api.addEventListener(new NitroRemover(this, getConfig()));
+          api.addEventListener(new NitroList(this, getConfig()));
+          api.addEventListener(new NitroHelp(this, getConfig()));
+          api.addEventListener(new NitroReload(this, getConfig()));
+          api.addEventListener(new NitroAddAlert(this, getConfig()));
+          api.addEventListener(new NitroRemoveAlert(this, getConfig()));
+          logger.info("Discord Bot (NitroCloudy) is now active!");
+          api.getGuildById(config.getServer()).updateCommands().addCommands(
+                  Commands.slash("help", "List commands for the bot"),
+                  Commands.slash("redeem", "Redeem nitro perks for your account")
+                          .addOption(OptionType.STRING, "username", "Your Minecraft username", true),
+                  Commands.slash("config-reload", "Reload the config"),
+                  Commands.slash("list", "display list of active nitro boosters or the current commands in config")
+                          .addOption(OptionType.STRING, "list", "Which list to display", true, true),
+                  Commands.slash("remove", "Remove nitro perks"),
+                  Commands.slash("force-remove", "Remove nitro perk from user")
+                          .addOption(OptionType.USER, "user", "User to remove nitro perks from", true)
+          ).queue();
+      } catch (Exception e) {
+          logger.info("Failed to login to Discord:" + e.getMessage());
+      }
     }
   }
 
-  public Optional<Server> getServer() {
-    return api.getServerById(config.getServer());
+  public Guild getServer() {
+      return api.getGuildById(config.getServer());
   }
 
-  private void setAPI(DiscordApi api) {
+  private void setAPI(JDA api) {
     this.api = api;
   }
 
   public void disable() {
     if (this.api != null) {
-      this.api.disconnect();
+      this.api.shutdown();
     }
     this.api = null;
   }
@@ -75,55 +94,19 @@ public class DiscordBot {
   }
 
   public void sendMessage(String message, boolean alert) {
-    if (api != null && !alert) {
-      api.getServerById(config.getServer())
-          .ifPresent(
-              server ->
-                  server
-                      .getChannelById(config.getMainChannel())
-                      .ifPresent(
-                          channel ->
-                              channel
-                                  .asTextChannel()
-                                  .ifPresent(
-                                      text ->
-                                          text.sendMessage(message)
-                                              .thenAccept(
-                                                  sentMessage ->
-                                                      sentMessage
-                                                          .getApi()
-                                                          .getThreadPool()
-                                                          .getScheduler()
-                                                          .schedule(
-                                                              () -> sentMessage.delete(),
-                                                              15,
-                                                              TimeUnit.SECONDS)))));
-    } else if (api != null && alert) {
-      api.getServerById(config.getServer())
-          .ifPresent(
-              server ->
-                  server
-                      .getChannelById(config.getAlertChannel())
-                      .ifPresent(
-                          channel ->
-                              channel
-                                  .asTextChannel()
-                                  .ifPresent(text -> text.sendMessage(message))));
+    if (api != null) {
+        Guild guild = api.getGuildById(config.getServer());
+        if (guild != null) {
+            TextChannel textChannel = alert ? guild.getTextChannelById(config.getAlertChannel()) : guild.getTextChannelById(config.getMainChannel());
+            if (textChannel != null) {
+                if (alert) {
+                    textChannel.sendMessage(message).queue();
+                } else {
+                    textChannel.sendMessage(message).queue(m -> m.delete().queueAfter(15, TimeUnit.SECONDS));
+                }
+            }
+        }
     }
-  }
-
-  public void deleteCommand(MessageCreateEvent event) {
-    event
-        .getMessage()
-        .addReaction("✅")
-        .thenAccept(
-            reaction -> {
-              event
-                  .getApi()
-                  .getThreadPool()
-                  .getScheduler()
-                  .schedule(() -> event.getMessage().delete(), 10, TimeUnit.SECONDS);
-            });
   }
 
   public void reload() {

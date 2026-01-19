@@ -7,12 +7,12 @@ public class NitroUser {
 
   private String discordId;
   private UUID playerId;
-  private String discriminatedUsername;
+  private String discordUsername;
   private String minecraftUsername;
 
   public NitroUser(
-      String discriminatedUsername, String discordId, String minecraftUsername, UUID playerId) {
-    this.discriminatedUsername = discriminatedUsername;
+          String discordUsername, String discordId, String minecraftUsername, UUID playerId) {
+    this.discordUsername = discordUsername;
     this.discordId = discordId;
     this.minecraftUsername = minecraftUsername;
     this.playerId = playerId;
@@ -26,8 +26,8 @@ public class NitroUser {
     return playerId;
   }
 
-  public String getDiscriminatedUsername() {
-    return discriminatedUsername;
+  public String getDiscordUsername() {
+    return discordUsername;
   }
 
   public String getMinecraftUsername() {
@@ -37,7 +37,7 @@ public class NitroUser {
   @Override
   public String toString() {
     return String.format(
-        "%s:%s:%s:%s", discriminatedUsername, discordId, minecraftUsername, playerId.toString());
+        "%s:%s:%s:%s", discordUsername, discordId, minecraftUsername, playerId.toString());
   }
 
   @Override

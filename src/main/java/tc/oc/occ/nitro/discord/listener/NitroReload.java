@@ -1,36 +1,29 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.listener.message.MessageCreateListener;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroCloudy;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.DiscordBot;
 
-public class NitroReload extends NitroListener implements MessageCreateListener {
+public class NitroReload extends NitroListener {
 
   public NitroReload(DiscordBot api, NitroConfig config) {
     super(api, config);
   }
 
-  @Override
-  public void onMessageCreate(MessageCreateEvent event) {
-    if (event.getChannel().getIdAsString().equals(config.getStaffChannel())) {
-      if (event.getMessage().getContent().startsWith("!nitro-reload")) {
-        new MessageBuilder()
-            .append(
-                ":white_check_mark: "
-                    + event.getMessageAuthor().asUser().get().getMentionTag()
-                    + " The configuration has been reloaded!")
-            .send(event.getChannel());
-        api.alert(
-            ":arrows_clockwise: `"
-                + event.getMessageAuthor().getDiscriminatedName()
-                + "` (`"
-                + event.getMessageAuthor().getIdAsString()
-                + "`) has reloaded the configuration.");
-        NitroCloudy.get().reloadBotConfig();
-      }
+    @Override
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        if (event.getName().equals("config-reload")) {
+            if (!event.getChannel().getId().equals(config.getStaffChannel())) {
+                event.reply(":warning: Run this command in staff channel!").setEphemeral(true).queue();
+                return;
+            }
+            event.reply(":white_check_mark: The configuration has been reloaded!").queue();
+            api.alert(":arrows_clockwise: `" + event.getUser().getName() + "` (`" + event.getUser().getId() + "`) has reloaded the configuration.");
+            NitroCloudy.get().reloadBotConfig();
+        }
     }
-  }
 }

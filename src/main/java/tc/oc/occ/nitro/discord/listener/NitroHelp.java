@@ -1,53 +1,45 @@
 package tc.oc.occ.nitro.discord.listener;
 
 import java.util.concurrent.TimeUnit;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.listener.message.MessageCreateListener;
+
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.DiscordBot;
 
-public class NitroHelp extends NitroListener implements MessageCreateListener {
+public class NitroHelp extends NitroListener {
 
   public NitroHelp(DiscordBot api, NitroConfig config) {
     super(api, config);
   }
 
-  @Override
-  public void onMessageCreate(MessageCreateEvent event) {
-    if (event.getMessage().getContent().equalsIgnoreCase("!nitro-help")) {
-      api.deleteCommand(event);
-      EmbedBuilder helpEmbed =
-          new EmbedBuilder()
-              .setTitle("Nitro Commands")
-              .setDescription(
-                  "Available commands for the Nitro bot. View the source code [here](https://github.com/TBG1000/Nitro).")
-              .addField(
-                  "Boosters",
-                  "`!nitro-redeem <minecraft username>` - Redeem Nitro privileges\n"
-                      + "`!nitro-remove` - Removes Nitro privileges\n"
-                      + "`!nitro-help` - Display this menu")
-              .addField(
-                  "Staff",
-                  "`!nitro-list <boosters|bans|commands>`\n"
-                      + "`!nitro-force-remove <discord id>` - Forcefully remove a user's Nitro privileges\n"
-                      + "`!nitro-ban <discriminated username> <discord id>` - Ban a user from redeeming Nitro privileges\n"
-                      + "`!nitro-unban <discriminated username> <discord id>` - Unban a user from redeeming Nitro privileges\n"
-                      + "`!nitro-reload` - Reload the configuration file\n\n"
-                      + "_Note: staff commands may only be used in the configured staff channel_")
-              .setFooter(
-                  "Requested by " + event.getMessageAuthor().getDiscriminatedName(),
-                  event.getMessageAuthor().getAvatar());
-      event
-          .getChannel()
-          .sendMessage(helpEmbed)
-          .thenAccept(
-              embed ->
-                  embed
-                      .getApi()
-                      .getThreadPool()
-                      .getScheduler()
-                      .schedule(() -> embed.delete(), 30, TimeUnit.SECONDS));
+    MessageEmbed helpEmbed = new EmbedBuilder()
+            .setTitle("Nitro Commands")
+            .setDescription(
+                    "Available commands for the Nitro bot. View the source code [here](https://github.com/TBG1000/Nitro).")
+            .addField(
+                    "Boosters",
+                    "`/redeem <minecraft username>` - Redeem Nitro privileges\n"
+                            + "`/remove` - Removes Nitro privileges\n"
+                            + "`/help` - Display this menu", false)
+            .addField(
+                    "Staff",
+                    "`/list <boosters|commands>`\n"
+                            + "`/force-remove <discord user>` - Forcefully remove a user's Nitro privileges\n"
+                            + "`/config-reload` - Reload the configuration file\n\n"
+                            + "_Note: staff commands may only be used in the configured staff channel_", false).build();
+
+    @Override
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        if (event.getName().equals("help")) {
+            event.replyEmbeds(helpEmbed).setEphemeral(true).queue();
+        }
     }
-  }
 }

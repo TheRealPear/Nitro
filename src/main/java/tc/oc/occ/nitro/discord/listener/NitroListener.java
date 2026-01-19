@@ -1,12 +1,13 @@
 package tc.oc.occ.nitro.discord.listener;
 
 import java.util.List;
-import org.javacord.api.entity.permission.Role;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.DiscordBot;
 
-public abstract class NitroListener {
+public abstract class NitroListener extends ListenerAdapter {
 
   protected final NitroConfig config;
   protected final DiscordBot api;
@@ -17,19 +18,15 @@ public abstract class NitroListener {
   }
 
   protected boolean isNitro(User user) {
-    if (api.getServer().isPresent()) {
-      List<Role> roles = user.getRoles(api.getServer().get());
+    if (api.getServer() != null) {
+      List<Role> roles = user.getJDA().getRoles();
       return roles.stream().anyMatch(this::isNitro);
     }
     return false;
   }
 
   protected boolean isNitro(Role role) {
-    return role.getIdAsString().equalsIgnoreCase(config.getNitroRole());
+    return role.getId().equalsIgnoreCase(config.getNitroRole());
   }
 
-  protected boolean isBanned(User user) {
-    String discordId = user.getIdAsString();
-    return config.getBannedUsers().contains(discordId);
-  }
 }

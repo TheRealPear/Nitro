@@ -1,7 +1,11 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.listener.message.MessageCreateListener;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import org.jetbrains.annotations.NotNull;
 import tc.oc.occ.nitro.NitroCloudy;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.WebUtils;
@@ -9,83 +13,49 @@ import tc.oc.occ.nitro.data.NitroUser;
 import tc.oc.occ.nitro.discord.DiscordBot;
 import tc.oc.occ.nitro.events.NitroUserAddEvent;
 
-public class NitroRedeemer extends NitroListener implements MessageCreateListener {
+import java.util.UUID;
+
+public class NitroRedeemer extends NitroListener  {
 
   public NitroRedeemer(DiscordBot api, NitroConfig config) {
     super(api, config);
   }
 
-  @Override
-  public void onMessageCreate(MessageCreateEvent event) {
-    if (event.getChannel().getIdAsString().equals(config.getMainChannel())) {
-      if (event.getMessage().getContent().startsWith("!nitro-redeem")) {
-        api.deleteCommand(event);
-        event
-            .getMessageAuthor()
-            .asUser()
-            .ifPresent(
-                user -> {
-                  if (isNitro(user) && !isBanned(user)) {
-                    String[] parts = event.getMessage().getContent().split(" ");
-                    if (parts.length == 2) {
-                      String discriminatedUsername =
-                          event.getMessageAuthor().getDiscriminatedName();
-                      String discordId = event.getMessageAuthor().getIdAsString();
-                      String username = parts[1].replace("@", "").trim();
+    @Override
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        if (event.getName().equals("redeem")) {
+            OptionMapping messageOption = event.getOption("username");
+            if (messageOption == null ) return; // Don't need bot to respond because Discord forces input from user.
+            User user = event.getUser();
+            if (!isNitro(user)) {
+                event.reply(":no_entry_sign: You are not allowed to use this command! If you believe this is a mistake, contact a staff member.").setEphemeral(true).queue();
+                return;
+            }
+            String discordUsername = user.getName();
+            String discordID = user.getId();
+            if (config.getUser(discordID).isPresent()) {
+                NitroUser nitroUser = config.getUser(discordID).get();
+                event.reply(":no_entry_sign: Your Nitro Boosting privileges have already been claimed for "
+                        + nitroUser.getMinecraftUsername()
+                        + "(`" + nitroUser.getPlayerId().toString()
+                        + "`). If you wish to change this, use `/remove` or contact a staff member").setEphemeral(true).queue();
+                return;
+            }
+            String minecraftUsername = messageOption.getAsString();
+            WebUtils.getUUID(minecraftUsername).thenAcceptAsync(uuid -> {
+                if (uuid == null) {
+                    event.reply(":warning: Unable to find UUID for user").setEphemeral(true).queue();
+                    return;
+                }
+                NitroUser nitro = config.addNitro(discordUsername, discordID, minecraftUsername, uuid);
+                NitroCloudy.get().callSyncEvent(new NitroUserAddEvent(nitro));
+                event.reply(":white_check_mark: "
+                        + " Your Nitro Boosting privileges have been claimed for `"
+                        + nitro.getMinecraftUsername()
+                        + "` (`" + nitro.getPlayerId().toString()
+                        + "`). If something went wrong, or you're missing in-game perks, contact a staff member. Thanks for boosting the server!").setEphemeral(true).queue();
 
-                      if (config.getUser(discordId).isPresent()) {
-                        NitroUser nitro = config.getUser(discordId).get();
-                        api.sendMessage(
-                            ":negative_squared_cross_mark: "
-                                + user.getMentionTag()
-                                + " Your Nitro Boosting privileges have already been claimed for `"
-                                + nitro.getMinecraftUsername()
-                                + "` (`"
-                                + nitro.getPlayerId().toString()
-                                + "`). If you wish to change this, use `!nitro-remove` or contact a staff member.",
-                            false);
-                      } else {
-                        WebUtils.getUUID(username)
-                            .thenAcceptAsync(
-                                uuid -> {
-                                  if (uuid != null) {
-                                    NitroUser nitro =
-                                        config.addNitro(
-                                            discriminatedUsername, discordId, username, uuid);
-                                    NitroCloudy.get().callSyncEvent(new NitroUserAddEvent(nitro));
-                                    api.sendMessage(
-                                        ":white_check_mark: "
-                                            + user.getMentionTag()
-                                            + " Your Nitro Boosting privileges have been claimed for `"
-                                            + nitro.getMinecraftUsername()
-                                            + "` (`"
-                                            + nitro.getPlayerId().toString()
-                                            + "`). If something went wrong, or you're missing in-game perks, contact a staff member. Thanks for boosting the server!",
-                                        false);
-                                  } else {
-                                    api.alert(
-                                        ":warning: Unable to find UUID for user "
-                                            + discordId
-                                            + " - "
-                                            + username);
-                                  }
-                                });
-                      }
-
-                    } else {
-                      api.sendMessage(
-                          ":warning: Incorrect syntax! Please use `!nitro-redeem <minecraft username>`. For more information, use `!nitro-help`.",
-                          false);
-                    }
-                  } else {
-                    api.sendMessage(
-                        ":negative_squared_cross_mark: "
-                            + user.getMentionTag()
-                            + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.",
-                        false);
-                  }
-                });
-      }
+            });
+        }
     }
-  }
 }
