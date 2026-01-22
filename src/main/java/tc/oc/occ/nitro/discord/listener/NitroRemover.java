@@ -43,7 +43,7 @@ public class NitroRemover extends NitroListener{
             if (!config.getUser(discordId).isPresent()) {
                 event.reply(":no_entry_sign: No active Nitro Booster with the Discord ID `"
                         + discordId
-                        + "` was found in the configuration. Use `!list  boosters` for a list of active boosters.").queue(); //TODO: Change to actual command when finished
+                        + "` was found in the configuration. Use `/list boosters` for a list of active boosters.").queue();
             }
             NitroUser user = config.getUser(discordId).get();
             NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(user));
