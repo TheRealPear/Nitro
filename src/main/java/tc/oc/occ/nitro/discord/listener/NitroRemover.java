@@ -33,7 +33,7 @@ public class NitroRemover extends NitroListener{
             NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitroUser));
             event.reply(":white_check_mark: " + user.getAsMention() + " You have removed Nitro Boosting privileges from `" + nitroUser.getMinecraftUsername() + "` (`" + nitroUser.getPlayerId().toString() + "`). You may use `/redeem` to redeem them again.").setEphemeral(true).queue();
         } else if (event.getName().equals("force-remove")){
-            OptionMapping messageOption = event.getOption("discord-id");
+            OptionMapping messageOption = event.getOption("user");
             if (messageOption == null) return;
             if (!event.getChannelId().equals(config.getStaffChannel())) {
                 event.reply(":warning: Run this command in staff channel!").setEphemeral(true).queue();
