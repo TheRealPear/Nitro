@@ -105,7 +105,7 @@ server: ""      # ID of discord server
 nitro-role: ""  # ID of the nitro role
 
 channel-alerts: ""   # ID of channel where logs from bot are sent
-channel-main: ""     # # ID of channel where bot alerts new Nitro users to redeem perks
+channel-main: ""     # ID of channel where bot alerts new Nitro users to redeem perks
 channel-staff: ""   # ID of channel where staff can use management commands
 
 # List of redemption commands, executed when the user boosts the server
