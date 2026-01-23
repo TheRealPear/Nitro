@@ -89,7 +89,7 @@ public class NitroConfig {
   }
 
   public NitroUser addNitro(
-      String discordUsername, String discordId, String minecraftUsername, UUID playerId) {
+    String discordUsername, String discordId, String minecraftUsername, UUID playerId) {
     NitroUser user = new NitroUser(discordUsername, discordId, minecraftUsername, playerId);
     this.nitroUsers.add(user);
     return user;
@@ -100,8 +100,6 @@ public class NitroConfig {
         .filter(user -> user.getDiscordId().equalsIgnoreCase(discordId))
         .findAny();
   }
-
-
 
   public void removeNitro(NitroUser user) {
     nitroUsers.remove(user);

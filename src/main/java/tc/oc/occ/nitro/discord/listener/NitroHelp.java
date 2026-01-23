@@ -16,7 +16,7 @@ public class NitroHelp extends NitroListener {
     MessageEmbed helpEmbed = new EmbedBuilder()
             .setTitle("Nitro Commands")
             .setDescription(
-                    "Available commands for the Nitro bot. View the source code [here](https://github.com/TBG1000/Nitro).")
+                    "Available commands for NitroBot. View the source code [here](https://github.com/TBG1000/Nitro).")
             .addField(
                     "Boosters",
                     "`/redeem <minecraft username>` - Redeem Nitro privileges\n"

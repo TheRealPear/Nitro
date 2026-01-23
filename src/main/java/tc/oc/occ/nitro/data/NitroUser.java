@@ -11,7 +11,7 @@ public class NitroUser {
   private String minecraftUsername;
 
   public NitroUser(
-          String discordUsername, String discordId, String minecraftUsername, UUID playerId) {
+    String discordUsername, String discordId, String minecraftUsername, UUID playerId) {
     this.discordUsername = discordUsername;
     this.discordId = discordId;
     this.minecraftUsername = minecraftUsername;
@@ -37,13 +37,13 @@ public class NitroUser {
   @Override
   public String toString() {
     return String.format(
-        "%s:%s:%s:%s", discordUsername, discordId, minecraftUsername, playerId.toString());
+      "%s:%s:%s:%s", discordUsername, discordId, minecraftUsername, playerId.toString());
   }
 
   @Override
   public boolean equals(Object other) {
     return (other instanceof NitroUser)
-        && ((NitroUser) other).getDiscordId().equalsIgnoreCase(getDiscordId());
+      && ((NitroUser) other).getDiscordId().equalsIgnoreCase(getDiscordId());
   }
 
   public static NitroUser of(String data) {

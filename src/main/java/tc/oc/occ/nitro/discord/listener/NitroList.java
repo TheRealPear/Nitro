@@ -41,7 +41,7 @@ public class NitroList extends NitroListener  {
                     event.replyEmbeds(boostersList.build()).queue();
                 case "commands":
                     if (config.getRedemptionCommands().isEmpty()) {
-                        commandsList.addField("Redemption commands", "_No redemption commands found_", false);
+                        commandsList.addField("Redemption commands", "_No redemption commands found._", false);
                     } else {
                         commandsList.addField(
                                 "Redemption commands",
@@ -50,7 +50,7 @@ public class NitroList extends NitroListener  {
                                         .collect(Collectors.joining("\n")), false);
                     }
                     if (config.getRemovalCommands().isEmpty()) {
-                        commandsList.addField("Removal commands", "_No removal commands found_", false);
+                        commandsList.addField("Removal commands", "_No removal commands found._", false);
                     } else {
                         commandsList.addField(
                                 "Removal commands",
@@ -60,7 +60,7 @@ public class NitroList extends NitroListener  {
                     }
                     event.replyEmbeds(commandsList.build()).queue();
                 default:
-                    event.reply(":no_entry_sign: Invalid list provided! Options are boosters or commands").setEphemeral(true).queue();
+                    event.reply(":no_entry_sign: Invalid list provided! Options are boosters or commands.").setEphemeral(true).queue();
             }
         }
     }

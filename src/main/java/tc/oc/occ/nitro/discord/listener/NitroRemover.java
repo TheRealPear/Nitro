@@ -36,7 +36,7 @@ public class NitroRemover extends NitroListener{
             OptionMapping messageOption = event.getOption("discord-id");
             if (messageOption == null) return;
             if (!event.getChannelId().equals(config.getStaffChannel())) {
-                event.reply("Please run command in Staff Channel!").setEphemeral(true).queue();
+                event.reply(":warning: Run this command in staff channel!").setEphemeral(true).queue();
                 return;
             }
             String discordId = messageOption.getAsUser().getId();

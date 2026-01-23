@@ -33,7 +33,7 @@ public class NitroListener implements Listener {
     // Announce in console that the user has redeemed nitro privileges
     Bukkit.getConsoleSender()
         .sendMessage(
-            "[Nitro] Nitro Booster "
+            "[NitroBot] Nitro Booster "
                 + parts[0]
                 + " ("
                 + parts[1]
@@ -46,7 +46,7 @@ public class NitroListener implements Listener {
     for (String redemptionCommand : api.getConfig().getRedemptionCommands()) {
       // Print the redemption command(s) in console
       Bukkit.getConsoleSender()
-          .sendMessage("[Nitro] Executing redemption command: " + redemptionCommand);
+          .sendMessage("[NitroBot] Executing redemption command: " + redemptionCommand);
       // Execute the command
       if (redemptionCommand.contains("%s")) {
         Bukkit.getServer()
@@ -75,7 +75,7 @@ public class NitroListener implements Listener {
     // Announce in console that the user has lost nitro
     Bukkit.getConsoleSender()
         .sendMessage(
-            "[Nitro] Removing Nitro Boosting privileges from "
+            "[NitroBot] Removing Nitro Boosting privileges from "
                 + parts[2]
                 + " ("
                 + parts[3]
@@ -87,7 +87,7 @@ public class NitroListener implements Listener {
     // Iterate through the list of strings from removal-commands in the config
     for (String removalCommand : api.getConfig().getRemovalCommands()) {
       // Print the removal command(s) in console
-      Bukkit.getConsoleSender().sendMessage("[Nitro] Executing removal command: " + removalCommand);
+      Bukkit.getConsoleSender().sendMessage("[NitroBot] Executing removal command: " + removalCommand);
       // Execute the command
       if (removalCommand.contains("%s")) {
         Bukkit.getServer()

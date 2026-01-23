@@ -34,7 +34,7 @@ public class NitroRedeemer extends NitroListener  {
                 event.reply(":no_entry_sign: Your Nitro Boosting privileges have already been claimed for "
                         + nitroUser.getMinecraftUsername()
                         + "(`" + nitroUser.getPlayerId().toString()
-                        + "`). If you wish to change this, use `/remove` or contact a staff member").setEphemeral(true).queue();
+                        + "`). If you wish to change this, use `/remove` or contact a staff member.").setEphemeral(true).queue();
                 return;
             }
             String minecraftUsername = messageOption.getAsString();

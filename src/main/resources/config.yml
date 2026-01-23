@@ -1,13 +1,13 @@
-# Discord Config stuff
-enabled: true # Enable discord bot?
+# Nitro configuration
+enabled: true # Enable Discord bot?
 
-token: ""       # ID of Discord bot token
-server: ""      # ID of discord server
-nitro-role: ""  # ID of the nitro role
+token: "" # Discord bot token
+server: "" # ID of Discord server
+nitro-role: "" # ID of the Nitro role
 
-channel-alerts: ""   # ID of channel where logs from bot are sent
-channel-main: ""     # ID of channel where command can be used
-channel-staff: ""    # ID of channel where staff commands can be used
+channel-alerts: "" # ID of channel where logs from bot are sent
+channel-main: "" # ID of channel where command can be used
+channel-staff: "" # ID of channel where staff commands can be used
 
 # List of redemption commands, executed when the user redeems Nitro privileges
 redemption-commands:
@@ -17,7 +17,7 @@ redemption-commands:
 removal-commands:
   - ""
 
-# List of nitro boosters
+# List of Nitro boosters
 # Format
 # Discord username : User Discord ID : Minecraft username : Minecraft username
 nitro-boosters:

@@ -1,5 +1,6 @@
 name: Nitro
-main: tc.oc.occ.nitro.NitroCloudy
-description: A minecraft discord bot to handle Nitro perks
+description: ${project.description}
 version: ${project.version}
-author: applenick
+main: tc.oc.occ.nitro.NitroCloudy
+author: [ applenick, TBG1000 ]
+website: https://github.com/TBG1000/Nitro

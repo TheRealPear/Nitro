@@ -1,5 +1,5 @@
 # Nitro
-This project is a fork of applenick's [Nitro](https://github.com/applenick/Nitro), a Discord -> Minecraft bot which allows for Nitro users to claim an in-game rank or perks.
+This project is a fork of applenick's [Nitro](https://github.com/applenick/Nitro), a Discord to Minecraft bot which allows Nitro users to claim an in-game rank or perks.
 
 This plugin was originally created for use on [Overcast Community](https://oc.tc), while this specific fork has some changes to benefit [Warzone](https://github.com/Warzone). For OCC, its functionality has likely been adapted and implemented into Cloudy, a (sadly) closed source all-in-one bot with a variety of features (also developed by [applenick](https://github.com/applenick)).
 
@@ -35,9 +35,9 @@ removal-commands:
 - Active Nitro Boosters will be stored in `config.yml` under `nitro-boosters`.
 ```yml
 
-# List of nitro boosters
+# List of Nitro boosters
 # Format
-# Discord username with discriminator : Discord User ID : Minecraft username : Minecraft UUID
+# Discord username : Discord User ID : Minecraft username : Minecraft UUID
 nitro-boosters:
   - Notch:000000000123456789:Notch:069a79f4-44e9-4726-a5be-fca90e38aaf5
 ```
@@ -57,28 +57,29 @@ A number of commands are only available to staff in the configured staff channel
   - `commands`: Lists the redemption and removal commands present in the configuration.
 - `/force-remove`: Forcefully removes an active Nitro booster from the `nitro-boosters` list in the configuration. This command will execute the available removal commands for the targeted user.
 - `/config-reload`: Reloads the configuration file.
+
 ## Building
 
 1. First, [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) or download the project's source code.
 2. Optionally, make your desired changes.
-3. Run the code formatter, following Google's [code style.](https://google.github.io/styleguide/javaguide.html)
-```bash
-mvn com.coveo:fmt-maven-plugin:format
-```
+3. Run the code formatter, following [Google's code style](https://google.github.io/styleguide/javaguide.html).
+    ```bash
+    mvn com.coveo:fmt-maven-plugin:format
+    ```
 5. Compile the project.
-```bash
-mvn package
-```
+    ```bash
+    mvn package
+    ```
 
 You'll find the bot's `.jar` file inside the `target` folder of the project's root directory.
 
-You may also find a pre-built `.jar` [here](https://github.com/TBG1000/Nitro/actions/workflows/main.yml).
+You may also find a [pre-built `.jar` here](https://github.com/TBG1000/Nitro/actions/workflows/main.yml).
 
 ## Installing
 When creating the bot that will be linked to Nitro's plugin `.jar`, be sure to toggle on the "Server Members Intent" (`GUILD_MEMBERS`) option. If this setting is left off, the bot will not be able to properly function. It will fail to remove privileges from users that were previously Nitro Boosters but have since stopped boosting the server.
 
 1. Drop the plugin's `.jar` in your server's `plugins` folder.
-2. Restart the server to automatically generate the bot's required files (`config.yml`, `plugin.yml`).
+2. Restart the server to automatically generate the bot's required files (`config.yml`).
 3. Fill in the blanks of the configuration file (`config.yml`). To do this, you'll need the following:
    - A token for your Discord bot which you can get at the [Discord Developer Portal](https://discord.com/developers/docs)
    - The ID of the server in which the bot will be functioning.
@@ -91,12 +92,12 @@ When creating the bot that will be linked to Nitro's plugin `.jar`, be sure to t
    - The command(s) to be executed on the Minecraft server once a user stops boosting the Discord server.
 4. Restart the server once again for the changes to take place. Once your bot goes online, users may start redeeming their privileges in the designated channel.
 
-You may look at a sample of the configuration file [below](https://github.com/TBG1000/Nitro/#config).
-You can also find out how to get server, role or channel IDs [here](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID). 
+You may look at a [sample configuration file below](https://github.com/TBG1000/Nitro/#config).
+You can also find out [how to get server, role or channel IDs](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID). 
 
 ## Config
 ```yml
-# Discord Config stuff
+# Nitro configuration
 enabled: true # Enable discord bot?
 
 token: ""       # ID of Discord bot token

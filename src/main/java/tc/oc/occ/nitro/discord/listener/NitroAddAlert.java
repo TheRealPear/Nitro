@@ -17,9 +17,9 @@ public class NitroAddAlert extends NitroListener {
       for(Role r : event.getRoles()) {
           if(isNitro(r)) {
               api.sendMessage(
-                      ":tada: Thanks for boosting the server "
+                      ":tada: Thanks for boosting the server, "
                               + event.getMember().getUser().getAsMention()
-                              + "! Use `/redeem <minecraft username>` to claim your in-game privileges. If you need assistance, use `!/help` or contact a staff member.",
+                              + "! Use `/redeem <Minecraft username>` to claim your in-game privileges. If you need assistance, use `/help` or contact a staff member.",
                       false);
           }
       }

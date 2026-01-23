@@ -32,7 +32,7 @@ public class DiscordBot {
 
   public void enable() {
     if (config.isEnabled()) {
-      logger.info("Enabling Nitro DiscordBot...");
+      logger.info("Enabling NitroBot...");
       try {
           this.api = JDABuilder.createDefault(config.getToken())
                   .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
@@ -45,7 +45,7 @@ public class DiscordBot {
           api.addEventListener(new NitroReload(this, getConfig()));
           api.addEventListener(new NitroAddAlert(this, getConfig()));
           api.addEventListener(new NitroRemoveAlert(this, getConfig()));
-          logger.info("Discord Bot (NitroCloudy) is now active!");
+          logger.info("Discord Bot (NitroBot) is now active!");
           api.getGuildById(config.getServer()).updateCommands().addCommands(
                   Commands.slash("help", "List commands for the bot"),
                   Commands.slash("redeem", "Redeem Nitro perks for your account")
