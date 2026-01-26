@@ -19,7 +19,7 @@ public class NitroRemover extends NitroListener{
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if (event.getName().equals("remove")) {
+        if (event.getName().equals("revoke")) {
             Member member = event.getMember();
             if (!isNitro(member)) {
                 event.reply(":no_entry_sign: You are not allowed to use this command! If you believe this is a mistake, contact a staff member.").setEphemeral(true).queue();
@@ -33,7 +33,7 @@ public class NitroRemover extends NitroListener{
             NitroUser nitroUser = config.getUser(discordID).get();
             NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitroUser));
             event.reply(":white_check_mark: " + member.getAsMention() + " You have removed Nitro Boosting privileges from `" + nitroUser.getMinecraftUsername() + "` (`" + nitroUser.getPlayerId().toString() + "`). You may use `/redeem` to redeem them again.").setEphemeral(true).queue();
-        } else if (event.getName().equals("force-remove")){
+        } else if (event.getName().equals("force-revoke")){
             OptionMapping messageOption = event.getOption("user");
             if (messageOption == null) return;
             if (!event.getChannelId().equals(config.getStaffChannel())) {
