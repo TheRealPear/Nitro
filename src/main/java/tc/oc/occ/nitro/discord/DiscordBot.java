@@ -52,12 +52,12 @@ public class DiscordBot {
                   Commands.slash("help", "List commands for the bot"),
                   Commands.slash("redeem", "Redeem Nitro perks for your account")
                           .addOption(OptionType.STRING, "username", "Your Minecraft username", true),
-                  Commands.slash("config-reload", "Reload the config"),
-                  Commands.slash("list", "Display list of active Nitro boosters or the current commands in config")
+                  Commands.slash("config-reload", "Reload the configuration file"),
+                  Commands.slash("list", "Display list of active Nitro Boosters or the current commands in configuration")
                           .addOption(OptionType.STRING, "list", "Which list to display", true, true),
-                  Commands.slash("revoke", "Revoke Nitro perks from connected Minecraft Account"),
-                  Commands.slash("force-revoke", "Force removes in game Nitro perks from a user ")
-                          .addOption(OptionType.USER, "user", "User to remove Nitro perks from", true)
+                  Commands.slash("remove", "Remove Nitro perks from connected Minecraft account"),
+                  Commands.slash("revoke", "Forcefully remove in-game Nitro perks from a user")
+                          .addOption(OptionType.USER, "user", "User to revoke Nitro perks from", true)
           ).queue();
       } catch (Exception e) {
           logger.info("Failed to login to Discord:" + e.getMessage());

@@ -19,7 +19,7 @@ public class NitroRemover extends NitroListener{
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if (event.getName().equals("revoke")) {
+        if (event.getName().equals("remove")) {
             Member member = event.getMember();
             if (!isNitro(member)) {
                 event.reply(":no_entry_sign: You are not allowed to use this command! If you believe this is a mistake, contact a staff member.").setEphemeral(true).queue();
@@ -33,7 +33,7 @@ public class NitroRemover extends NitroListener{
             NitroUser nitroUser = config.getUser(discordID).get();
             NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitroUser));
             event.reply(":white_check_mark: " + member.getAsMention() + " You have removed Nitro Boosting privileges from `" + nitroUser.getMinecraftUsername() + "` (`" + nitroUser.getPlayerId().toString() + "`). You may use `/redeem` to redeem them again.").setEphemeral(true).queue();
-        } else if (event.getName().equals("force-revoke")){
+        } else if (event.getName().equals("revoke")){
             OptionMapping messageOption = event.getOption("user");
             if (messageOption == null) return;
             if (!event.getChannelId().equals(config.getStaffChannel())) {
@@ -48,9 +48,9 @@ public class NitroRemover extends NitroListener{
             }
             NitroUser user = config.getUser(discordId).get();
             NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(user));
-            event.reply(":triangular_flag_on_post: Forcefully removed Nitro Boosting privileges from `"
+            event.reply(":triangular_flag_on_post: Revoked Nitro Boosting privileges from `"
                     + user.getMinecraftUsername()
-                    + "` Originally claimed by `"
+                    + "`. Originally claimed by `"
                     + user.getDiscordUsername()
                     + "` (`"
                     + discordId
@@ -60,9 +60,9 @@ public class NitroRemover extends NitroListener{
                             + event.getUser().getName()
                             + "` (`"
                             + event.getUser().getId()
-                            + "`) has forcefully removed Nitro Boosting privileges from `"
+                            + "`) has revoked Nitro Boosting privileges from `"
                             + user.getMinecraftUsername()
-                            + "` Originally claimed by `"
+                            + "`. Originally claimed by `"
                             + user.getDiscordUsername()
                             + "` (`"
                             + discordId

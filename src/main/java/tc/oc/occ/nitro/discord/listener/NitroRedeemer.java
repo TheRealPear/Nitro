@@ -42,7 +42,7 @@ public class NitroRedeemer extends NitroListener  {
             }
             String minecraftUsername = messageOption.getAsString().replaceAll("\\s","");
             if (config.getUsers().stream().anyMatch(user -> user.getMinecraftUsername().equalsIgnoreCase(minecraftUsername))) {
-                event.reply(":no_entry_sign: This Minecraft username is already receiving nitro perks!").setEphemeral(true).queue();
+                event.reply(":no_entry_sign: This Minecraft username is already receiving Nitro perks!").setEphemeral(true).queue();
                 return;
             }
             UUID uuid = WebUtils.getUUID(minecraftUsername);

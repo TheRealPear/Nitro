@@ -55,7 +55,7 @@ A number of commands are only available to staff in the configured staff channel
 - `/list <boosters|commands>`
   - `boosters`: Lists all Nitro boosters that have redeemed Nitro privileges.
   - `commands`: Lists the redemption and removal commands present in the configuration.
-- `/force-revoke`: Forcefully removes an active Nitro booster from the `nitro-boosters` list in the configuration. This command will execute the available removal commands for the targeted user.
+- `/revoke`: Forcefully removes an active Nitro booster from the `nitro-boosters` list in the configuration. This command will execute the available removal commands for the targeted user.
 - `/config-reload`: Reloads the configuration file.
 
 ## Building

@@ -19,15 +19,15 @@ public class NitroHelp extends NitroListener {
                     "Available commands for NitroBot. View the source code [here](https://github.com/TBG1000/Nitro).")
             .addField(
                     "Boosters",
-                    "`/redeem <minecraft username>` - Redeem Nitro privileges\n"
+                    "`/redeem <Minecraft username>` - Redeem Nitro privileges\n"
                             + "`/remove` - Removes Nitro privileges\n"
                             + "`/help` - Display this menu", false)
             .addField(
                     "Staff",
                     "`/list <boosters|commands>`\n"
-                            + "`/force-remove <discord user>` - Forcefully remove a user's Nitro privileges\n"
+                            + "`/revoke <Discord user>` - Forcefully remove a user's Nitro privileges\n"
                             + "`/config-reload` - Reload the configuration file\n\n"
-                            + "_Note: staff commands may only be used in the configured staff channel_", false).build();
+                            + "_Note: staff commands may only be used in the configured staff channel._", false).build();
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
