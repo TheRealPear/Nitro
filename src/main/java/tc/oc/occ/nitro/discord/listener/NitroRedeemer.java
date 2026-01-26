@@ -38,7 +38,7 @@ public class NitroRedeemer extends NitroListener  {
                         + "`). If you wish to change this, use `/remove` or contact a staff member.").setEphemeral(true).queue();
                 return;
             }
-            String minecraftUsername = messageOption.getAsString();
+            String minecraftUsername = messageOption.getAsString().replaceAll("\\s","");
             if (config.getUsers().stream().anyMatch(user -> user.getMinecraftUsername().equalsIgnoreCase(minecraftUsername))) {
                 event.reply(":no_entry_sign: This Minecraft username is already receiving nitro perks!").setEphemeral(true).queue();
                 return;
