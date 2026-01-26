@@ -21,10 +21,6 @@ public class NitroRemover extends NitroListener{
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (event.getName().equals("remove")) {
             Member member = event.getMember();
-            if (!isNitro(member)) {
-                event.reply(":no_entry_sign: You are not allowed to use this command! If you believe this is a mistake, contact a staff member.").setEphemeral(true).queue();
-                return;
-            }
             String discordID = member.getId();
             if (!config.getUser(discordID).isPresent()) {
                 event.reply(":no_entry_sign: You have not yet redeemed your Nitro Boosting perks. Use `/redeem` to claim them! For more information, use `/help`.").setEphemeral(true).queue();
