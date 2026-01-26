@@ -12,6 +12,8 @@ import tc.oc.occ.nitro.data.NitroUser;
 import tc.oc.occ.nitro.discord.DiscordBot;
 import tc.oc.occ.nitro.events.NitroUserAddEvent;
 
+import java.util.UUID;
+
 public class NitroRedeemer extends NitroListener  {
 
   public NitroRedeemer(DiscordBot api, NitroConfig config) {
@@ -43,7 +45,7 @@ public class NitroRedeemer extends NitroListener  {
                 event.reply(":no_entry_sign: This Minecraft username is already receiving nitro perks!").setEphemeral(true).queue();
                 return;
             }
-            WebUtils.getUUID(minecraftUsername).thenAcceptAsync(uuid -> {
+            UUID uuid = WebUtils.getUUID(minecraftUsername);
             if (uuid == null) {
                 event.reply(":warning: Unable to find UUID for provided Minecraft username!").setEphemeral(true).setEphemeral(true).queue();
                 return;
@@ -55,8 +57,6 @@ public class NitroRedeemer extends NitroListener  {
                     + nitro.getMinecraftUsername()
                     + "` (`" + nitro.getPlayerId().toString()
                     + "`). If something went wrong, or you're missing in-game perks, contact a staff member. Thanks for boosting the server!").setEphemeral(true).queue();
-
-            });
         }
     }
 }
